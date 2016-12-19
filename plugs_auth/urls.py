@@ -2,7 +2,7 @@ from django.conf.urls import url
 
 from plugs_core import utils
 
-from . import views
+from plugs_auth import views
 
 endpoint = utils.get_authentication_endpoint()
 

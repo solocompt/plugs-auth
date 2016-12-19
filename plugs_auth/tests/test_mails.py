@@ -5,11 +5,10 @@ Test Emails
 from django.test.utils import override_settings
 
 from plugs_core.testcases import PlugsAPITestCase
-
-from .factories import UserFactory
-
-from plugs_mail.management.commands import load_email_templates
 from plugs_core import utils
+from plugs_mail.management.commands import load_email_templates
+
+from plugs_auth.factories import UserFactory
 
 
 endpoint = utils.get_authentication_endpoint()

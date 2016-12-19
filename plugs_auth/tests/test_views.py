@@ -9,7 +9,7 @@ from rest_framework.test import APITestCase
 from plugs_core import utils
 from plugs_core.testcases import PlugsAPITestCase
 
-from .factories import UserFactory
+from plugs_auth.factories import UserFactory
 
 model = get_user_model()
 endpoint = utils.get_authentication_endpoint()

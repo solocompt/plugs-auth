@@ -1,5 +1,5 @@
 """
-Solo Base Auth Model
+Plugs Base Auth Model
 """
 
 from django.db import models
@@ -8,8 +8,8 @@ from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from plugs_core import utils
 from plugs_mail import utils as mail_utils
 
-from . import emails
-from .managers import PlugsAuthManager
+from plugs_auth import emails
+from plugs_auth.managers import PlugsAuthManager
 
 class PlugsAuthModel(AbstractBaseUser, PermissionsMixin):
     """

@@ -4,7 +4,7 @@ Email Template Definition
 
 from urllib.parse import urlencode
 
-from .settings import plugs_auth_settings as settings
+from plugs_mail.settings import plugs_auth_settings as settings
 
 from plugs_mail.mail import PlugsMail
 

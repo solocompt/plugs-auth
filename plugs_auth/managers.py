@@ -11,7 +11,6 @@ class PlugsAuthManager(BaseUserManager):
     some utils to manage users, like normalize_email
     and make_random_password
     """
-
     
     def _create_user(self, email, password, **extra_fields):
         """
