@@ -8,23 +8,19 @@ with open(os.path.join(os.path.dirname(__file__), 'README.md')) as readme:
 os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 
 setup(
-    name='plugs-auth-app',
-    package = 'plugs_auth_app',
+    name='plugs-auth',
+    package = 'plugs_auth',
     version='0.1.0',
     packages=find_packages(),
     include_package_data=True,
     license='BSD',
     description='Reusable Authentication APP',
     long_description=README,
-    url='https://bitbucket.org/solopt/auth-app/',
+    url='https://bitbucket.org/solopt/plugs-auth/',
     author='Ricardo Lobo',
     author_email='ricardolobo@soloweb.pt',
     install_requires = [
-    'django>=1.9.7',
-    'djangorestframework>=3.3.3',
-    'djangorestframework-jwt>=1.8.0',
-    'requests>=2.2.1',
-    'PyJWT>=1.4.0,<2.0.0'
+        'plugs-core==0.1.0'
     ],
     classifiers=[
         'Environment :: Web Environment',
