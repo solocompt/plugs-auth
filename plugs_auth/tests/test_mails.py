@@ -8,7 +8,7 @@ from plugs_core.testcases import PlugsAPITestCase
 from plugs_core import utils
 from plugs_mail.management.commands import load_email_templates
 
-from plugs_auth.factories import UserFactory
+from plugs_auth.tests.factories import UserFactory
 
 
 endpoint = utils.get_authentication_endpoint()
