@@ -5,10 +5,13 @@ Solo Base Auth Model
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 
-from authentication.managers import PlugsAuthManager
+from plugs_core import utils
+from plugs_mail import utils as mail_utils
 
+from . import emails
+from .managers import PlugsAuthManager
 
-class SoloAuthModel(AbstractBaseUser, PermissionsMixin):
+class PlugsAuthModel(AbstractBaseUser, PermissionsMixin):
     """
     Member model
     """
@@ -16,13 +19,16 @@ class SoloAuthModel(AbstractBaseUser, PermissionsMixin):
     is_active = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
     token = models.CharField(max_length=24, null=False, unique=True)
-    objects = SoloAuthManager()
+    objects = PlugsAuthManager()
 
+    # the field used to authenticate a user
+    USERNAME_FIELD = 'email'
+    
     def __init__(self, *args, **kwargs):
         """
         Overring init to store original password
         """
-        super(SoloAuthModel, self).__init__(*args, **kwargs)
+        super(PlugsAuthModel, self).__init__(*args, **kwargs)
         self.__original_password = self.password
 
     @property
@@ -30,7 +36,7 @@ class SoloAuthModel(AbstractBaseUser, PermissionsMixin):
         """
         The field used to authenticate a user
         """
-        return self.email
+        return self.USERNAME_FIELD
 
     def set_token(self):
         """
@@ -44,19 +50,19 @@ class SoloAuthModel(AbstractBaseUser, PermissionsMixin):
         """
         Send email to user with reset password link
         """
-        utils.to_email(emails.ResetPassword, self.email, **{'user': self})
+        mail_utils.to_email(emails.ResetPassword, self.email, **{'user': self})
 
     def send_activation_email(self):
         """
         Send email to user with activation details
         """
-        utils.to_email(emails.ActivateAccount, self.email, **{'user': self})
+        mail_utils.to_email(emails.ActivateAccount, self.email, **{'user': self})
 
     def send_account_activated_email(self):
         """
         Send email to user saying account has been activated
         """
-        utils.to_email(emails.AccountActivated, self.email, **{'user': self})
+        mail_utils.to_email(emails.AccountActivated, self.email, **{'user': self})
 
     def save(self, *args, **kwargs):
         """
@@ -68,7 +74,7 @@ class SoloAuthModel(AbstractBaseUser, PermissionsMixin):
                 self.set_password(self.password)
         else:
             self.set_token()
-        super(SoloAuthModel, self).save(*args, **kwargs)
+        super(PlugsAuthModel, self).save(*args, **kwargs)
 
     # we can mark fields as abstract to demand subclass to implement them
     class Meta:

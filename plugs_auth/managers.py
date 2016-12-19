@@ -1,8 +1,9 @@
 """
-Authentication App Managers
+Plugs Authentication Managers
 """
 
 from django.contrib.auth.models import BaseUserManager
+
 
 class PlugsAuthManager(BaseUserManager):
     """
@@ -11,6 +12,7 @@ class PlugsAuthManager(BaseUserManager):
     and make_random_password
     """
 
+    
     def _create_user(self, email, password, **extra_fields):
         """
         Creates and saves a User with the given username, email and password.
@@ -21,6 +23,7 @@ class PlugsAuthManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
+    
     def create(self, email, password=None, silent=False, **extra_fields):
         extra_fields.setdefault('is_staff', False)
         extra_fields.setdefault('is_superuser', False)
@@ -29,6 +32,7 @@ class PlugsAuthManager(BaseUserManager):
             user.send_activation_email()
         return user
 
+    
     def create_superuser(self, email, password, **extra_fields):
         """
         This method is provided to enable createsuperuser command
