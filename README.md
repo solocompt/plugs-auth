@@ -1,3 +1,8 @@
-# Plugs Auth App
+=====
+Plugs Auth
+=====
 
-* http://wiki.soloweb.pt/doku.php?id=solo:documentation:webmodules#authentication
+Quick start
+-----------
+
+Soon...
