@@ -1,3 +1,4 @@
+recursive-include plugs_auth/templates *.html
 recursive-exclude * __pycache__
 recursive-exclude * *.py[co]
 recursive-exclude * *~
