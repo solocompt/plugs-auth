@@ -3,6 +3,7 @@ Testing Users Endpoint
 """
 
 from django.contrib.auth import get_user_model
+from django.core.urlresolvers import reverse
 
 from rest_framework.test import APITestCase
 
@@ -12,7 +13,6 @@ from plugs_core.testcases import PlugsAPITestCase
 from plugs_auth.tests.factories import UserFactory
 
 model = get_user_model()
-endpoint = utils.get_authentication_endpoint()
 
 class TestViews(PlugsAPITestCase):
     """
@@ -27,8 +27,11 @@ class TestViews(PlugsAPITestCase):
         # user = UserFactory(is_active=True)
         user = UserFactory(is_active=False, first_name='Joe')
 
+        # @FIX url pattern not correct
+        url = reverse('activate-user') + '?token=' + user.token
+
         # exercise
-        response = self.client.get('/{0}/activate/?token={1}'.format(endpoint, user.token))
+        response = self.client.get(url)
 
         # assert
         self.assert200(response)
@@ -41,12 +44,12 @@ class TestViews(PlugsAPITestCase):
         Ensures guest can start reset password process
         """
         # setup
-        # user = UserFactory(is_active=True)
-        user = UserFactory(is_active=False, first_name='Joe')
+        user = UserFactory(is_active=True)
 
         # exercise
+        url = reverse('reset-password')
         data = {'email': user.email}
-        response = self.client.post('/{0}/reset_password/'.format(endpoint), data)
+        response = self.client.post(url, data)
         self.assert200(response)
 
         # assert validation token has been refreshed
@@ -59,8 +62,7 @@ class TestViews(PlugsAPITestCase):
         Ensures guest can set new password
         """
         # setup
-        #user = UserFactory(is_active=True)
-        user = UserFactory(is_active=False, first_name='Joe')
+        user = UserFactory(is_active=True)
 
         # exercise
         data = {
@@ -69,7 +71,7 @@ class TestViews(PlugsAPITestCase):
             'password': 'newpassword'
         }
 
-        self.client.post('/{0}/set_password/'.format(endpoint), data)
+        self.client.post(reverse('set-password'), data)
         self.assertLogin(user.email, 'newpassword')
 
 
@@ -81,7 +83,7 @@ class TestViews(PlugsAPITestCase):
 
         # exercise
         data = {'email': user.email}
-        response = self.client.post('/{0}/reset_password/'.format(endpoint), data)
+        response = self.client.post(reverse('reset-password'), data)
         self.assert200(response)
 
         user.refresh_from_db()
@@ -92,7 +94,7 @@ class TestViews(PlugsAPITestCase):
             'token': user.token,
             'password': 'newpassword'
         }
-        response = self.client.post('/{0}/set_password/'.format(endpoint), data)
+        response = self.client.post(reverse('set-password'), data)
         self.assert200(response)
 
         user.refresh_from_db()
@@ -116,7 +118,7 @@ class TestViews(PlugsAPITestCase):
             'password': 'newpassword'
         }
 
-        response = self.client.post('/{0}/set_password/'.format(endpoint), data)
+        response = self.client.post(reverse('set-password'), data)
         self.assert400(response)
         self.assertCannotLogin(user.email, 'newpassword')
 
@@ -135,21 +137,6 @@ class TestViews(PlugsAPITestCase):
             'token': 'xxx'
         }
 
-        response = self.client.post('/{0}/set_password/'.format(endpoint), data)
+        response = self.client.post(reverse('set-password'), data)
         self.assert404(response)
         self.assertCannotLogin(user.email, 'newpassword')
-
-
-    def test_superuser_can_login_with_new_account(self):
-        """
-        Ensures superuser is created and can login
-        """
-        data = {
-            'email': 'joe@somewhere.org',
-            'password': 'longandhardpass'
-        }
-        user = model.objects.create_superuser(**data)
-
-        # created password should be unusable
-        self.assertTrue(user.has_usable_password())
-        self.assertLogin(data['email'], data['password'])

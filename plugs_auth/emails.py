@@ -23,7 +23,6 @@ class ActivateAccount(PlugsMail):
         params = '?' + urlencode({
             'token': user.token
         })
-        print('line 28', settings)
         activate_uri = settings['SITE_ACTIVATE_VIEW'] + params
         return {'activate_uri': activate_uri}
 
