@@ -16,7 +16,6 @@ class ActivateAccount(PlugsMail):
     template = 'ACTIVATE_ACCOUNT'
     context = ('User', )
     description = 'Email sent to user after registration with link to activate his account'
-    subject = 'Ativa a tua conta'
 
     def get_extra_context(self):
         user = self.context_data.get('user')
@@ -34,7 +33,6 @@ class ResetPassword(PlugsMail):
     template = 'RESET_PASSWORD'
     context = ('User', )
     description = 'Email sent to user with reset password link'
-    subject = 'Perdeste a tua password?'
 
     def get_extra_context(self):
         """
@@ -58,4 +56,3 @@ class AccountActivated(PlugsMail):
     template = 'ACCOUNT_ACTIVATED'
     context = ('User', )
     description = 'Email sent to user after succesful account activation'
-    subject = 'Conta ativada com sucesso'
