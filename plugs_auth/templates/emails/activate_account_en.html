@@ -1,0 +1,13 @@
+Activate account
+
+{% extends "base.html" %}
+{% load emailtags %}
+{% block content %}
+
+<p>Hello {{user.first_name}},</p>
+<p>Your account was successfully created.</p>
+<p>Please confirm your email by clicking the link bellow:</p>
+
+{% button activate_uri "activate account" %}
+
+{% endblock %}
