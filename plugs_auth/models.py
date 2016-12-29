@@ -19,6 +19,7 @@ class PlugsAuthModel(AbstractBaseUser, PermissionsMixin):
     is_active = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
     token = models.CharField(max_length=24, null=False, unique=True)
+    language = models.CharField(max_length=2, null=True)
     objects = PlugsAuthManager()
 
     # the field used to authenticate a user
@@ -50,19 +51,19 @@ class PlugsAuthModel(AbstractBaseUser, PermissionsMixin):
         """
         Send email to user with reset password link
         """
-        mail_utils.to_email(emails.ResetPassword, self.email, **{'user': self})
+        mail_utils.to_email(emails.ResetPassword, self.email, self.language, **{'user': self})
 
     def send_activation_email(self):
         """
         Send email to user with activation details
         """
-        mail_utils.to_email(emails.ActivateAccount, self.email, **{'user': self})
+        mail_utils.to_email(emails.ActivateAccount, self.email, self.language, **{'user': self})
 
     def send_account_activated_email(self):
         """
         Send email to user saying account has been activated
         """
-        mail_utils.to_email(emails.AccountActivated, self.email, **{'user': self})
+        mail_utils.to_email(emails.AccountActivated, self.email, self.language,  **{'user': self})
 
     def save(self, *args, **kwargs):
         """
