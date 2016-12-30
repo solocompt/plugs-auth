@@ -19,7 +19,7 @@ class PlugsAuthModel(AbstractBaseUser, PermissionsMixin):
     is_active = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
     token = models.CharField(max_length=24, null=False, unique=True)
-    language = models.CharField(max_length=2, null=True)
+    language = models.CharField(max_length=2, default='en')
     objects = PlugsAuthManager()
 
     # the field used to authenticate a user
