@@ -34,6 +34,7 @@ class PlugsAuthManager(BaseUserManager):
             user.send_activation_email()
         else:
             user.is_active=True
+            user.save()
         return user
 
     
