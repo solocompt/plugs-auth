@@ -1,6 +1,7 @@
 """
 Plugs Authentication Managers
 """
+from plugs_auth.settings import plugs_auth_settings as settings
 
 from django.contrib.auth.models import BaseUserManager
 
@@ -24,11 +25,15 @@ class PlugsAuthManager(BaseUserManager):
 
     
     def create(self, email, password=None, silent=False, **extra_fields):
+        if silent:
+            print('Silent has been deprecated')
         extra_fields.setdefault('is_staff', False)
         extra_fields.setdefault('is_superuser', False)
         user = self._create_user(email, password, **extra_fields)
-        if not silent:
+        if settings['REQUIRE_ACTIVATION']:
             user.send_activation_email()
+        else:
+            user.is_active=True
         return user
 
     

@@ -6,9 +6,8 @@ from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
 
 
-MANDATORY_SETTINGS = ['SITE_RESET_VIEW', 'SITE_ACTIVATE_VIEW']
+MANDATORY_SETTINGS = ['RESET_VIEW']
 PROJECT_SETTINGS = getattr(settings, 'PLUGS_AUTH', {})
-
 
 for setting in MANDATORY_SETTINGS:
     try:
@@ -18,9 +17,15 @@ for setting in MANDATORY_SETTINGS:
 
 DEFAULTS = {
     'USER_ENDPOINT': 'users',
+    'REQUIRE_ACTIVATION': True
 }
 
-if not PROJECT_SETTINGS.get('USER_ENDPOINT'):
-    PROJECT_SETTINGS['USER_ENDPOINT'] = DEFAULTS['USER_ENDPOINT']
+for setting in DEFAULTS.keys():
+    if setting not in PROJECT_SETTINGS:
+        PROJECT_SETTINGS[setting] = DEFAULTS[setting]
+
+# conditional settings, only required if something, something...
+if PROJECT_SETTINGS['REQUIRE_ACTIVATION'] and 'ACTIVATE_VIEW' not in PROJECT_SETTINGS:
+    raise ImproperlyConfigured('Missing ACTIVATE_VIEW. This setting is required if REQUIRE_ACTIVATION is True')
 
 plugs_auth_settings = PROJECT_SETTINGS

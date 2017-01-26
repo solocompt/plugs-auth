@@ -14,8 +14,9 @@ from plugs_core.viewsets import CreateUpdateReadViewSet
 
 from plugs_auth.serializers import ResetSerializer, SetSerializer
 from plugs_auth import utils
+from plugs_auth.decorators import dynamicviewset
 
-
+@dynamicviewset
 class PlugsUserViewSet(CreateUpdateReadViewSet):
     """
     Use this class as a base class for a user viewset,
