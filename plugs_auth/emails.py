@@ -22,7 +22,7 @@ class ActivateAccount(PlugsMail):
         params = '?' + urlencode({
             'token': user.token
         })
-        activate_uri = settings['SITE_ACTIVATE_VIEW'] + params
+        activate_uri = settings['ACTIVATE_VIEW'] + params
         return {'activate_uri': activate_uri}
 
 
@@ -45,7 +45,7 @@ class ResetPassword(PlugsMail):
             'token': user.token
         })
 
-        reset_password_uri = settings['SITE_RESET_VIEW'] + params
+        reset_password_uri = settings['RESET_VIEW'] + params
         return {'reset_password_uri': reset_password_uri}
 
 
