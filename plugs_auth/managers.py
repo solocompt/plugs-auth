@@ -25,16 +25,16 @@ class PlugsAuthManager(BaseUserManager):
 
     
     def create(self, email, password=None, silent=False, **extra_fields):
-        if silent:
-            print('Silent has been deprecated')
+        """
+        TODO: Silent argument does nothing
+        """
+        if not settings['REQUIRE_ACTIVATION']:
+            extra_fields.setdefault('is_active', True)
         extra_fields.setdefault('is_staff', False)
         extra_fields.setdefault('is_superuser', False)
         user = self._create_user(email, password, **extra_fields)
         if settings['REQUIRE_ACTIVATION']:
             user.send_activation_email()
-        else:
-            user.is_active=True
-            user.save()
         return user
 
     
