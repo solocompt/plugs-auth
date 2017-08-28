@@ -25,7 +25,7 @@ class PlugsUserViewSet(CreateUpdateReadViewSet):
     the language using user submited data, accept-language header
     or project settings
     """
-    
+
     def perform_create(self, serializer):
         serializer.validated_data['language'] = utils.get_language_code(self.request, serializer)
         serializer.save()
@@ -39,7 +39,7 @@ class PlugsUserViewSet(CreateUpdateReadViewSet):
         user.send_account_activated_email()
         return Response(data={"message": "Activated"})
 
-    @list_route(methods=['POST'], permission_classes=[permissions.AllowAny])
+    @list_route(methods=['POST'], permission_classes=[permissions.AllowAny], url_path='reset-password')
     def reset_password(self, request):
         """
         Starts the reset password process by sending an email
@@ -52,7 +52,7 @@ class PlugsUserViewSet(CreateUpdateReadViewSet):
         user.save()
         return Response(data={"message": "Email Sent"})
 
-    @list_route(methods=['POST'], permission_classes=[permissions.AllowAny])
+    @list_route(methods=['POST'], permission_classes=[permissions.AllowAny], url_path='set-password')
     def set_password(self, request):
         """
         Sets a new password after a reset password request
@@ -68,7 +68,7 @@ class PlugsUserViewSet(CreateUpdateReadViewSet):
         user.save()
         return Response(data={"message": "New password set"})
 
-    @list_route(methods=['POST'], permission_classes=[permissions.AllowAny])
+    @list_route(methods=['POST'], permission_classes=[permissions.AllowAny], url_path='resend-verification-email')
     def resend_verification_email(self, request):
         """
         Resends the verification email to a user
