@@ -46,33 +46,28 @@ history = open('HISTORY.rst').read().replace('.. :changelog:', '')
 setup(
     name='plugs-auth',
     version=version,
-    description="""Your project description goes here""",
+    description="""Reusable Authentication""",
     long_description=readme + '\n\n' + history,
-    author='Ricardo Lobo',
-    author_email='ricardolobo@soloweb.pt',
-    url='https://github.com/ricardolobo/plugs-auth',
+    author='Solo',
+    author_email='geral@solo.com.pt',
+    url='https://github.com/solocompt/plugs-auth',
     packages=[
         'plugs_auth',
     ],
     include_package_data=True,
     install_requires=[
-        'plugs-core>=0.1.0',
-        'plugs-mail>=0.1.0'
+        'plugs-core>=0.1.0,<0.3.0',
+        'plugs-mail>=0.1.0,<0.3.0'
     ],
     license="MIT",
     zip_safe=False,
     keywords='plugs-auth',
     classifiers=[
         'Development Status :: 3 - Alpha',
-        'Framework :: Django',
-        'Framework :: Django :: 1.9',
+        'Framework :: Django :: 1.11',
         'Intended Audience :: Developers',
-        'License :: OSI Approved :: BSD License',
+        'License :: OSI Approved :: MIT License',
         'Natural Language :: English',
-        'Programming Language :: Python :: 2',
-        'Programming Language :: Python :: 2.7',
-        'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.4',
-        'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3'
     ],
 )
