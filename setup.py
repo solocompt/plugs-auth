@@ -56,8 +56,8 @@ setup(
     ],
     include_package_data=True,
     install_requires=[
-        'plugs-core>=0.1.0,<1.0.0',
-        'plugs-mail>=0.1.0,<1.0.0'
+        'plugs-core>=0.2.0',
+        'plugs-mail>=0.2.0'
     ],
     license="MIT",
     zip_safe=False,
