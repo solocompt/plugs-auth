@@ -1,9 +1,6 @@
-"""
-Plugs Base Auth Model
-"""
-
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
+from django.contrib.auth import hashers
 
 from plugs_core import utils
 from plugs_mail import utils as mail_utils
@@ -12,9 +9,6 @@ from plugs_auth import emails
 from plugs_auth.managers import PlugsAuthManager
 
 class PlugsAuthModel(AbstractBaseUser, PermissionsMixin):
-    """
-    Member model
-    """
     email = models.EmailField(unique=True)
     is_active = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
@@ -24,25 +18,16 @@ class PlugsAuthModel(AbstractBaseUser, PermissionsMixin):
 
     # the field used to authenticate a user
     USERNAME_FIELD = 'email'
-    
+
     def __init__(self, *args, **kwargs):
-        """
-        Overring init to store original password
-        """
         super(PlugsAuthModel, self).__init__(*args, **kwargs)
         self.__original_password = self.password
 
     @property
     def username(self):
-        """
-        The field used to authenticate a user
-        """
         return self.USERNAME_FIELD
 
     def set_token(self):
-        """
-        Set a unique verified token
-        """
         params = {'length': 24}
         queryset = self.__class__.objects
         self.token = utils.get_db_distinct(queryset, 'token', utils.random_string, **params)
@@ -65,18 +50,26 @@ class PlugsAuthModel(AbstractBaseUser, PermissionsMixin):
         """
         mail_utils.to_email(emails.AccountActivated, self.email, self.language,  **{'user': self})
 
+    def is_password_hashed(self):
+        try:
+            return hashers.identify_hasher(self.password)
+        except ValueError:
+            return False
+
+    def _update_password(self):
+        if not self.is_password_hashed():
+            self.set_password(self.password)
+
+    def password_has_changed(self):
+        return self.password != self.__original_password
+
+
     def save(self, *args, **kwargs):
-        """
-        Override save method
-        """
-        if self.pk:
-            # original password differs from new password
-            if self.password != self.__original_password:
-                self.set_password(self.password)
+        if self.pk and self.password_has_changed():
+            self._update_password()
         else:
             self.set_token()
-        super(PlugsAuthModel, self).save(*args, **kwargs)
+            super(PlugsAuthModel, self).save(*args, **kwargs)
 
-    # we can mark fields as abstract to demand subclass to implement them
     class Meta:
         abstract = True
