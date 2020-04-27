@@ -69,7 +69,7 @@ class PlugsAuthModel(AbstractBaseUser, PermissionsMixin):
             self._update_password()
         else:
             self.set_token()
-            super(PlugsAuthModel, self).save(*args, **kwargs)
+        super(PlugsAuthModel, self).save(*args, **kwargs)
 
     class Meta:
         abstract = True
