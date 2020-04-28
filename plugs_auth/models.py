@@ -63,12 +63,11 @@ class PlugsAuthModel(AbstractBaseUser, PermissionsMixin):
     def password_has_changed(self):
         return self.password != self.__original_password
 
-
     def save(self, *args, **kwargs):
+        if not self.pk:
+            self.set_token()
         if self.pk and self.password_has_changed():
             self._update_password()
-        else:
-            self.set_token()
         super(PlugsAuthModel, self).save(*args, **kwargs)
 
     class Meta:
